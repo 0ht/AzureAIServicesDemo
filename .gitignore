@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Azure / CLI / tooling
+.azure/
+.azd/
+.azcli/
+.azureclitoken
+azureProfile.json
+
+# Bicep / ARM build artifacts
+# Ignore only generated compiled files if you don't want them in source control
+infra/main.json
+
+# Node (if present)
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Editor temp
+*.swp
+*~
+
+# Secret / keys / credentials
+# Environment files
+.env.local
+.env.*
+
+# Common secret file names
+secrets.json
+credentials.json
+credentials.*
+*.key
+*.pem
+*.p12
+*-key.json
+*secret*.json
+
+# Azure specific secrets
+# (these files may be created by local tooling)
+azureCredentials.json
+azureProfile.json
+
+# JetBrains IDE
+.idea/
+
+# Terraform (if present)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Docker
+docker-compose.override.yml
+
+# Mac
+.DS_Store
