@@ -70,7 +70,7 @@ cp .env.template .env
 - **場所**: `demos/openai/`
 - **内容**: GPT-4、GPT-3.5-turbo、DALL-E、Embeddingsのデモ
 - **ノートブック**: 
-  - `01_chat_completion.ipynb` - チャット補完API
+  - `01_chat_completion.ipynb` - チャット補完API（Chat Completions API）
   - `02_embeddings.ipynb` - テキスト埋め込み
   - `03_image_generation.ipynb` - 画像生成
 

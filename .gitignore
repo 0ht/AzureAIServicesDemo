@@ -38,6 +38,9 @@ node_modules/
 logs/
 *.log
 
+# Generated Images
+demos/openai/generated_images
+
 # Editor temp
 *.swp
 *~

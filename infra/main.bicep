@@ -15,9 +15,92 @@ param projectPrefix string = 'aiservicesdemo'
 param uniqueId string = uniqueString(resourceGroup().id)
 
 @description('既に同名で soft-deleted された Cognitive Services を復元する場合は true にします（デフォルト false）')
-param restore bool = true
+param restore bool = false
+
+@description('DALL-E 3 をデプロイする場合は true (リージョン未対応なら false のまま)')
+param deployDalle3 bool = false
+
+@description('GPT Image モデルをデプロイする場合は true')
+param deployGptImage bool = false
+
+@description('DALL-E 3 モデルバージョン (リージョンで利用可能な最新値に合わせて更新)')
+param dalle3Version string = '3.0'
+
+@description('GPT Image モデルバージョン')
+param gptImageVersion string = '1'
 
 // Cognitive Services (AI Services) の作成
+// 画像モデル用のオプション配列を構築 (条件付き)
+var dallE3Deployment = deployDalle3 ? [
+  {
+    name: 'dall-e-3'
+    model: {
+      format: 'OpenAI'
+      name: 'dall-e-3'
+      version: dalle3Version
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 1
+    }
+  }
+] : []
+
+var gptImageDeployment = deployGptImage ? [
+  {
+    name: 'gpt-image-1'
+    model: {
+      format: 'OpenAI'
+      name: 'gpt-image-1'
+      version: gptImageVersion
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 1
+    }
+  }
+] : []
+
+// 全デプロイ配列を連結構築
+var allDeployments = concat([
+  {
+    name: 'gpt-4o'
+    model: {
+      format: 'OpenAI'
+      name: 'gpt-4o'
+      version: '2024-11-20'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 10
+    }
+  }
+  {
+    name: 'gpt-35-turbo'
+    model: {
+      format: 'OpenAI'
+      name: 'gpt-35-turbo'
+      version: '0125'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 10
+    }
+  }
+  {
+    name: 'text-embedding-ada-002'
+    model: {
+      format: 'OpenAI'
+      name: 'text-embedding-ada-002'
+      version: '2'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 10
+    }
+  }
+], dallE3Deployment, gptImageDeployment)
+
 module aiServices 'br/public:avm/res/cognitive-services/account:0.13.2' = {
   name: 'aiServices-deployment'
   params: {
@@ -28,46 +111,8 @@ module aiServices 'br/public:avm/res/cognitive-services/account:0.13.2' = {
     customSubDomainName: '${projectPrefix}-ai-${environmentName}-${take(uniqueId, 6)}'
     disableLocalAuth: false
     publicNetworkAccess: 'Enabled'
-    // オプトインで復元フラグを渡す
     restore: restore
-    deployments: [
-      {
-        name: 'gpt-4o'
-        model: {
-          format: 'OpenAI'
-          name: 'gpt-4o'
-          version: '2024-11-20'
-        }
-        sku: {
-          name: 'Standard'
-          capacity: 10
-        }
-      }
-      {
-        name: 'gpt-35-turbo'
-        model: {
-          format: 'OpenAI'
-          name: 'gpt-35-turbo'
-          version: '0125'
-        }
-        sku: {
-          name: 'Standard'
-          capacity: 10
-        }
-      }
-      {
-        name: 'text-embedding-ada-002'
-        model: {
-          format: 'OpenAI'
-          name: 'text-embedding-ada-002'
-          version: '2'
-        }
-        sku: {
-          name: 'Standard'
-          capacity: 10
-        }
-      }
-    ]
+    deployments: allDeployments
     tags: {
       Environment: environmentName
       Project: 'Azure AI Services Demo'

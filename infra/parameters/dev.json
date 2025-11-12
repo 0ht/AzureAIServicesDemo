@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus"
+    },
+    "environmentName": {
+      "value": "dev"
+    },
+    "projectPrefix": {
+      "value": "aiservices-demo"
+    },
+    "restore": {
+      "value": true
+    },
+    "deployDalle3": {
+      "value": true
+    },
+    "deployGptImage": {
+      "value": false
+    },
+    "useExistingDalle3": {
+      "value": true
+    },
+    "existingDalle3Name": {
+      "value": "dall-e-3"
+    }
+  }
+}
